@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="DP," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="选择DP分析第一步要明确两点，「状态」和「选择」。 先说状态，如何才能描述一个问题局面？只要给几个物品和一个背包的容量限制，就形成了一个背包问题呀。所以状态有两个，就是「背包的容量」和「可选择的物品」。 再说选择，也很容易想到啊，对于每件物品，你能选择什么？选择就是「装进背包」或者「不装进背包」嘛。 明白了状态和选择，动态规划问题基本上就解决了，只要往这个框架套就完事儿了： 1234for 状态1">
+<meta name="keywords" content="DP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="背包问题">
+<meta property="og:url" content="https:&#x2F;&#x2F;chym1009.github.io&#x2F;2020&#x2F;03&#x2F;29&#x2F;%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98&#x2F;index.html">
+<meta property="og:site_name" content="沧海月明的blog">
+<meta property="og:description" content="选择DP分析第一步要明确两点，「状态」和「选择」。 先说状态，如何才能描述一个问题局面？只要给几个物品和一个背包的容量限制，就形成了一个背包问题呀。所以状态有两个，就是「背包的容量」和「可选择的物品」。 再说选择，也很容易想到啊，对于每件物品，你能选择什么？选择就是「装进背包」或者「不装进背包」嘛。 明白了状态和选择，动态规划问题基本上就解决了，只要往这个框架套就完事儿了： 1234for 状态1">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-03-29T10:17:28.000Z">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://chym1009.github.io/2020/03/29/背包问题/"/>
+
+
+
+
+
+  <title>背包问题 | 沧海月明的blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">沧海月明的blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://chym1009.github.io/2020/03/29/%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="chym">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="沧海月明的blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">背包问题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-29T18:17:28+08:00">
+                2020-03-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="选择DP分析"><a href="#选择DP分析" class="headerlink" title="选择DP分析"></a>选择DP分析</h2><blockquote><p><strong>第一步要明确两点，「状态」和「选择」</strong>。</p>
+<p>先说状态，如何才能描述一个问题局面？只要给几个物品和一个背包的容量限制，就形成了一个背包问题呀。<strong>所以状态有两个，就是「背包的容量」和「可选择的物品」</strong>。</p>
+<p>再说选择，也很容易想到啊，对于每件物品，你能选择什么？<strong>选择就是「装进背包」或者「不装进背包」嘛</strong>。</p>
+<p>明白了状态和选择，动态规划问题基本上就解决了，只要往这个框架套就完事儿了：</p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> 状态<span class="number">1</span> <span class="keyword">in</span> 状态<span class="number">1</span>的所有取值：</span><br><span class="line">    <span class="keyword">for</span> 状态<span class="number">2</span> <span class="keyword">in</span> 状态<span class="number">2</span>的所有取值：</span><br><span class="line">        <span class="keyword">for</span> ...</span><br><span class="line">            dp[状态<span class="number">1</span>][状态<span class="number">2</span>][...] = 择优(选择<span class="number">1</span>，选择<span class="number">2.</span>..)</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+
+<p><strong>第二步要明确</strong> <strong><code>dp</code></strong> <strong>数组的定义</strong>。<br>首先看看刚才找到的「状态」，有两个，也就是说我们需要一个二维 <code>dp</code> 数组。</p>
+<p><code>dp[i][w]</code> 的定义如下：对于前 <code>i</code> 个物品，当前背包的容量为 <code>w</code>，这种情况下可以装的最大价值是 <code>dp[i][w]</code>。</p>
+<p>比如说，如果 <code>dp[3][5] = 6</code>，其含义为：对于给定的一系列物品中，若只对前 3 个物品进行选择，当背包容量为 5 时，最多可以装下的价值为 6。</p>
+<p>根据这个定义，我们想求的最终答案就是 <code>dp[N][W]</code>。base case 就是 <code>dp[0][..] = dp[..][0] = 0</code>，因为没有物品或者背包没有空间的时候，能装的最大价值就是 0。</p>
+<p>细化上面的框架：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">int dp[<span class="string">N+1</span>][<span class="symbol">W+1</span>]</span><br><span class="line">dp[<span class="string">0</span>][<span class="symbol">..</span>] = 0</span><br><span class="line">dp[<span class="string">..</span>][<span class="symbol">0</span>] = 0</span><br><span class="line"></span><br><span class="line">for i in [1..N]:</span><br><span class="line"><span class="code">    for w in [1..W]:</span></span><br><span class="line"><span class="code">        dp[i][w] = max(</span></span><br><span class="line"><span class="code">            把物品 i 装进背包,</span></span><br><span class="line"><span class="code">            不把物品 i 装进背包</span></span><br><span class="line"><span class="code">        )</span></span><br><span class="line">return dp[<span class="string">N</span>][<span class="symbol">W</span>]</span><br></pre></td></tr></table></figure>
+
+<p><strong>第三步，根据「选择」，思考状态转移的逻辑</strong>。</p>
+<p>简单说就是，上面伪码中「把物品 <code>i</code> 装进背包」和「不把物品 <code>i</code> 装进背包」怎么用代码体现出来呢？</p>
+<p>这就要结合对 <code>dp</code> 数组的定义和我们的算法逻辑来分析了：</p>
+<p>先重申一下刚才我们的 <code>dp</code> 数组的定义：</p>
+<p><code>dp[i][w]</code> 表示：对于前 <code>i</code> 个物品，当前背包的容量为 <code>w</code> 时，这种情况下可以装下的最大价值是 <code>dp[i][w]</code>。</p>
+<p><strong>如果你没有把这第</strong> <strong><code>i</code></strong> <strong>个物品装入背包</strong>，那么很显然，最大价值 <code>dp[i][w]</code> 应该等于 <code>dp[i-1][w]</code>，继承之前的结果。</p>
+<p><strong>如果你把这第</strong> <strong><code>i</code></strong> <strong>个物品装入了背包</strong>，那么 <code>dp[i][w]</code> 应该等于 <code>dp[i-1][w - wt[i-1]] + val[i-1]</code>。</p>
+<p>首先，由于 <code>i</code> 是从 1 开始的，所以 <code>val</code> 和 <code>wt</code> 的索引是 <code>i-1</code> 时表示第 <code>i</code> 个物品的价值和重量。</p>
+<p>而 <code>dp[i-1][w - wt[i-1]]</code> 也很好理解：你如果装了第 <code>i</code> 个物品，就要寻求剩余重量 <code>w - wt[i-1]</code> 限制下的最大价值，加上第 <code>i</code> 个物品的价值 <code>val[i-1]</code>。</p>
+<p>综上就是两种选择，我们都已经分析完毕，也就是写出来了状态转移方程，可以进一步细化代码：</p>
+<figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">for i in <span class="comment">[1..N]</span>:</span><br><span class="line">    for w in <span class="comment">[1..W]</span>:</span><br><span class="line">        dp<span class="comment">[i]</span><span class="comment">[w]</span> = max(</span><br><span class="line">            dp<span class="comment">[i-1]</span><span class="comment">[w]</span>,</span><br><span class="line">            dp<span class="comment">[i-1]</span><span class="comment">[w - wt<span class="comment">[i-1]</span>]</span> + val<span class="comment">[i-1]</span></span><br><span class="line">        )</span><br><span class="line">return dp<span class="comment">[N]</span><span class="comment">[W]</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>最后一步，把伪码翻译成代码，处理一些边界情况</strong>。</p>
+<footer><strong>labuladong</strong><cite><a href="https://labuladong.gitbook.io/algo/dong-tai-gui-hua-xi-lie/bei-bao-wen-ti" target="_blank" rel="noopener">经典动态规划：0-1 背包问题</a></cite></footer></blockquote>
+
+<h2 id="0-1背包"><a href="#0-1背包" class="headerlink" title="0-1背包"></a>0-1背包</h2><blockquote>
+<p>有 N 件物品和一个容量是 W 的背包。每件物品只能<strong>使用一次</strong>。</p>
+<p>第 i 件物品的体积是 wi，价值是 vi。</p>
+<p>求解将哪些物品装入背包，可使这些物品的总体积不超过背包容量，且总价值最大。</p>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">knapsack</span><span class="params">(<span class="keyword">int</span> W, <span class="keyword">int</span> N, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; w, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; v)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; dp(N + <span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(W + <span class="number">1</span>, <span class="number">0</span>));</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= N; i ++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= W; j ++) &#123;</span><br><span class="line">            dp[i][j] = dp[i - <span class="number">1</span>][j];</span><br><span class="line">            <span class="keyword">if</span> (j &gt;= w[i<span class="number">-1</span>])    dp[i][j] = max(dp[i - <span class="number">1</span>][j - w[i<span class="number">-1</span>]] + v[i<span class="number">-1</span>], dp[i][j]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[N][W];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><em>优化空间版本</em></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">knapsack</span><span class="params">(<span class="keyword">int</span> W, <span class="keyword">int</span> N, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; w, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; v)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp(W + <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= N; i ++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = W; j &gt;= w[i<span class="number">-1</span>]; j --) &#123;  <span class="comment">//w从大到小循环</span></span><br><span class="line">            dp[j] = max(dp[j - w[i<span class="number">-1</span>]] + v[i<span class="number">-1</span>], dp[j]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[W];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="完全背包问题"><a href="#完全背包问题" class="headerlink" title="完全背包问题"></a>完全背包问题</h2><blockquote>
+<p>有 N 种物品和一个容量是 V 的背包，每种物品都有<strong>无限件可用</strong>。</p>
+<p>第 i 种物品的体积是 vi，价值是 wi。</p>
+<p>求解将哪些物品装入背包，可使这些物品的总体积不超过背包容量，且总价值最大。</p>
+</blockquote>
+<p><strong>递归方程推导</strong></p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dp[<span class="string">i</span>][<span class="symbol">j</span>] = max(d[<span class="string">i-1</span>][<span class="symbol">j</span>], d[<span class="string">i-1</span>][<span class="symbol">j - v[i</span>]] + w[<span class="string">i</span>], ...,  d[<span class="string">i-1</span>][<span class="symbol">j - k * v[i</span>] ] + k * w[i])</span><br><span class="line">dp[<span class="string">i</span>][<span class="symbol">j-v[i</span>]] = max(d[<span class="string">i-1</span>][<span class="symbol">j-v[i</span>]], d[<span class="string">i-1</span>][<span class="symbol">j - 2*v[i</span>]] + w[<span class="string">i</span>], ...,  d[<span class="string">i-1</span>][<span class="symbol">j - k * v[i</span>] ] + (k-1) * w[i])</span><br><span class="line">dp[<span class="string">i</span>][<span class="symbol">j</span>] = max(dp[<span class="string">i-1, j</span>], dp[<span class="string">i</span>][<span class="symbol">j-v[i</span>]] + w[i])</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">int knapsack(int W, int N, vector&lt;int&gt;&amp; w, vector&lt;int&gt;&amp; v) &#123;</span><br><span class="line">    vector&lt;vector&lt;int&gt;&gt; dp(N + <span class="number">1</span>, vector&lt;int&gt;(W + <span class="number">1</span>, <span class="number">0</span>));</span><br><span class="line">    <span class="keyword">for</span> (int <span class="built_in">i</span> = <span class="number">1</span>; <span class="built_in">i</span> &lt;= N; <span class="built_in">i</span> ++)</span><br><span class="line">        <span class="keyword">for</span> (int <span class="built_in">j</span> = <span class="number">1</span>; <span class="built_in">j</span> &lt;= W; <span class="built_in">j</span> ++) &#123;</span><br><span class="line">            dp[<span class="built_in">i</span>][<span class="built_in">j</span>] = dp[<span class="built_in">i</span><span class="number">-1</span>][<span class="built_in">j</span>];</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">j</span> &gt;= w[<span class="built_in">i</span><span class="number">-1</span>]) dp[<span class="built_in">i</span>][<span class="built_in">j</span>] = <span class="built_in">max</span>(dp[<span class="built_in">i</span>][<span class="built_in">j</span>], dp[<span class="built_in">i</span>][<span class="built_in">j</span> - w[<span class="built_in">i</span><span class="number">-1</span>]] + v[<span class="built_in">i</span><span class="number">-1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[N][W];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><em>优化空间版本</em></p>
+<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span> knapsack(<span class="built_in">int</span> W, <span class="built_in">int</span> N, vector&lt;<span class="built_in">int</span>&gt;&amp; w, vector&lt;<span class="built_in">int</span>&gt;&amp; v) &#123;</span><br><span class="line">    vector&lt;<span class="built_in">int</span>&gt; dp(W + <span class="number">1</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">1</span>; i &lt;= N; i ++)</span><br><span class="line">        <span class="keyword">for</span> (<span class="built_in">int</span> j = <span class="number">1</span>; j &lt;= W; j ++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (j &gt;= w[i<span class="number">-1</span>]) dp[j] = max(dp[j], dp[j - w[i<span class="number">-1</span>]] + v[i<span class="number">-1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dp[W];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>Ref:</strong>  <a href="https://www.bilibili.com/video/BV1X741127ZM?from=search&seid=586746750935479628" target="_blank" rel="noopener">闫氏DP分析法，从此再也不怕DP问题！</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/DP/" rel="tag"># DP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/uploads/avatar.jpg"
+                alt="chym" />
+            
+              <p class="site-author-name" itemprop="name">chym</p>
+              <p class="site-description motion-element" itemprop="description">记录生活</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#选择DP分析"><span class="nav-number">1.</span> <span class="nav-text">选择DP分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0-1背包"><span class="nav-number">2.</span> <span class="nav-text">0-1背包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完全背包问题"><span class="nav-number">3.</span> <span class="nav-text">完全背包问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">chym</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+</body>
+</html>
